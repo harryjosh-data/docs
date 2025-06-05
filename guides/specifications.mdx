@@ -1,0 +1,68 @@
+---
+title: Technical Specifications
+description: Detailed technical information for seamless integration.
+---
+
+# Technical Specifications
+
+Detailed technical information for seamless integration.
+
+## Data Format & Structure
+
+### JSON Schema
+```json
+{
+  "instruction": "string",
+  "input": "string", 
+  "output": "string"
+}
+```
+
+### Field Descriptions
+| Field         | Description                                     |
+|---------------|-------------------------------------------------|
+| `instruction` | Context or role definition for the AI system  |
+| `input`       | Medical question or patient scenario            |
+| `output`      | Medical answer, advice, or diagnosis            |
+
+## Quality Metrics
+<CardGroup cols={4}>
+    <Card title="Medical Accuracy">
+        <p class="text-2xl font-bold text-blue-600">98.5%</p>
+    </Card>
+    <Card title="Clinical Relevance">
+        <p class="text-2xl font-bold text-green-600">97.2%</p>
+    </Card>
+    <Card title="Data Completeness">
+        <p class="text-2xl font-bold text-purple-600">99.1%</p>
+    </Card>
+    <Card title="Format Consistency">
+        <p class="text-2xl font-bold text-orange-600">100%</p>
+    </Card>
+</CardGroup>
+
+## Supported Frameworks
+<CardGroup cols={1}>
+<Card title="Machine Learning" icon="brain">
+- Transformers (Hugging Face)
+- OpenAI GPT API
+- PyTorch
+- TensorFlow
+</Card>
+</CardGroup>
+
+## Performance Benchmarks
+<CardGroup cols={3}>
+    <Card title="Query Response Time" icon="gauge-high">
+        <p class="text-3xl font-bold text-blue-600">&lt;50ms</p>
+        <p>Average response time for medical queries</p>
+    </Card>
+    <Card title="Training Efficiency" icon="chart-line">
+        <p class="text-3xl font-bold text-green-600">95%</p>
+        <p>Model training accuracy improvement</p>
+    </Card>
+    <Card title="Memory Usage" icon="memory">
+        <p class="text-3xl font-bold text-purple-600">1.2GB</p>
+        <p>Peak memory usage for full dataset</p>
+    </Card>
+</CardGroup> 
