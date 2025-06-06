@@ -1,0 +1,319 @@
+---
+title: Visualization Guide
+description: Comprehensive guide to visualizing medical datasets with charts, graphs, and analysis techniques.
+---
+
+# Medical Dataset Visualization Guide
+
+Learn how to create compelling visualizations for medical datasets with our step-by-step guide.
+
+## 🎯 Visualization Overview
+
+<CardGroup cols={2}>
+  <Card title="Word Frequency Analysis" icon="chart-bar">
+    Bar charts showing frequency of top medical terms in input and output fields
+  </Card>
+  <Card title="Word Clouds" icon="cloud">
+    Visual representation where term size indicates prominence in the dataset
+  </Card>
+  <Card title="Length Distribution" icon="chart-line">
+    Histograms showing distribution of input and output text lengths
+  </Card>
+  <Card title="Medical Condition Heatmap" icon="table-cells">
+    Heatmap comparing prevalence of key medical conditions across datasets
+  </Card>
+</CardGroup>
+
+---
+
+## 📋 Required Libraries
+
+<Tabs>
+  <Tab title="Core Libraries">
+    ```bash
+    pip install pandas numpy matplotlib seaborn nltk wordcloud pillow scikit-learn
+    ```
+  </Tab>
+  
+  <Tab title="Setup Code">
+    ```python
+    import json
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from collections import Counter
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.tokenize import word_tokenize
+    from wordcloud import WordCloud
+    import re
+    
+    # Download NLTK resources
+    nltk.download('punkt')
+    nltk.download('stopwords')
+    
+    # Set plotting style
+    plt.style.use('ggplot')
+    sns.set(style="whitegrid")
+    plt.rcParams['figure.figsize'] = [12, 8]
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## 🔧 Text Preprocessing
+
+<Steps>
+  <Step title="Define Preprocessing Function">
+    ```python
+    def preprocess_text(text):
+        """Clean and tokenize text, remove stopwords"""
+        if not isinstance(text, str):
+            return []
+        
+        # Convert to lowercase and remove non-alphabetic characters
+        text = re.sub(r'[^a-zA-Z\s]', ' ', text.lower())
+        
+        # Tokenize
+        tokens = word_tokenize(text)
+        
+        # Remove stopwords
+        stop_words = set(stopwords.words('english'))
+        medical_stopwords = {'the', 'and', 'of', 'to', 'is', 'in', 'doctor', 'patient'}
+        stop_words.update(medical_stopwords)
+        tokens = [token for token in tokens if token not in stop_words and len(token) > 2]
+        
+        return tokens
+    ```
+  </Step>
+  
+  <Step title="Extract Common Terms">
+    ```python
+    def get_most_common_terms(texts, n=15):
+        """Get the most common terms in a list of texts"""
+        all_tokens = []
+        for text in texts:
+            tokens = preprocess_text(text)
+            all_tokens.extend(tokens)
+        return Counter(all_tokens).most_common(n)
+    ```
+  </Step>
+</Steps>
+
+---
+
+## 📊 Word Frequency Charts
+
+Create bar charts showing the most frequent medical terms:
+
+```python
+# Generate word frequency charts for each dataset
+for name, df in datasets.items():
+    fig, axes = plt.subplots(1, 2, figsize=(20, 6))
+    
+    # Input field analysis
+    input_terms = get_most_common_terms(df['input'], 15)
+    terms, counts = zip(*input_terms)
+    
+    sns.barplot(x=list(terms), y=list(counts), ax=axes[0], palette='viridis')
+    axes[0].set_title(f'Top Medical Terms in Input - {name}', fontsize=14)
+    axes[0].tick_params(axis='x', rotation=45)
+    
+    # Output field analysis
+    output_terms = get_most_common_terms(df['output'], 10)
+    terms, counts = zip(*output_terms)
+    
+    sns.barplot(x=list(terms), y=list(counts), ax=axes[1], palette='viridis')
+    axes[1].set_title(f'Top Medical Terms in Output - {name}', fontsize=14)
+    axes[1].tick_params(axis='x', rotation=45)
+    
+    plt.tight_layout()
+    plt.show()
+```
+
+<Callout type="info">
+**Key Insights:** Reveals dominant terms - "syndrome" & "disease" in General Medical, "except" & "disease" in Evaluation Medical, "experiencing" & "pain" in GenMedGPT-5k
+</Callout>
+
+---
+
+## ☁️ Word Cloud Generation
+
+```python
+def generate_wordcloud(texts, title):
+    """Generate and display a word cloud from texts"""
+    text = ' '.join([t for t in texts if isinstance(t, str)])
+    
+    # Preprocess text
+    text = re.sub(r'[^a-zA-Z\s]', ' ', text.lower())
+    
+    # Create stopwords set
+    stop_words = set(stopwords.words('english'))
+    medical_stopwords = {'the', 'and', 'of', 'to', 'is', 'doctor', 'patient'}
+    stop_words.update(medical_stopwords)
+    
+    # Create WordCloud
+    wordcloud = WordCloud(
+        width=800, 
+        height=400,
+        background_color='white',
+        stopwords=stop_words,
+        max_words=100,
+        contour_width=3,
+        contour_color='steelblue'
+    ).generate(text)
+    
+    # Display the word cloud
+    plt.figure(figsize=(12, 8))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    plt.title(title, fontsize=16)
+    plt.tight_layout()
+    plt.show()
+
+# Generate word clouds for each dataset
+for name, df in datasets.items():
+    generate_wordcloud(df['input'], f'Word Cloud - {name} Input Field')
+    generate_wordcloud(df['output'], f'Word Cloud - {name} Output Field')
+```
+
+---
+
+## 📏 Length Distribution Analysis
+
+```python
+def count_words(texts):
+    """Count words in a list of texts"""
+    return [len(text.split()) if isinstance(text, str) else 0 for text in texts]
+
+# Calculate text lengths
+for name, df in datasets.items():
+    df['input_length'] = count_words(df['input'])
+    df['output_length'] = count_words(df['output'])
+
+# Create distribution plots
+fig, axes = plt.subplots(2, 1, figsize=(14, 12))
+
+# Input length distributions
+sns.histplot(data=general_df, x='input_length', kde=True, label='General Medical', 
+             ax=axes[0], alpha=0.5, bins=30)
+sns.histplot(data=evaluation_df, x='input_length', kde=True, label='Evaluation Medical', 
+             ax=axes[0], alpha=0.5, bins=30)
+sns.histplot(data=genmedgpt_df, x='input_length', kde=True, label='GenMedGPT-5k', 
+             ax=axes[0], alpha=0.5, bins=30)
+
+axes[0].set_title('Distribution of Input Lengths', fontsize=14)
+axes[0].legend()
+
+# Output length distributions
+sns.histplot(data=general_df, x='output_length', kde=True, label='General Medical', 
+             ax=axes[1], alpha=0.5, bins=30)
+sns.histplot(data=evaluation_df, x='output_length', kde=True, label='Evaluation Medical', 
+             ax=axes[1], alpha=0.5, bins=30)
+sns.histplot(data=genmedgpt_df, x='output_length', kde=True, label='GenMedGPT-5k', 
+             ax=axes[1], alpha=0.5, bins=30)
+
+axes[1].set_title('Distribution of Output Lengths', fontsize=14)
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+## 🔗 Correlation Analysis
+
+```python
+# Create correlation scatter plot
+plt.figure(figsize=(15, 10))
+
+plt.scatter(general_df['input_length'], general_df['output_length'], 
+           alpha=0.5, label='General Medical', color='blue')
+plt.scatter(evaluation_df['input_length'], evaluation_df['output_length'], 
+           alpha=0.5, label='Evaluation Medical', color='green')
+plt.scatter(genmedgpt_df['input_length'], genmedgpt_df['output_length'], 
+           alpha=0.5, label='GenMedGPT-5k', color='red')
+
+plt.title('Input vs Output Length Relationship', fontsize=14)
+plt.xlabel('Input Length (Words)', fontsize=12)
+plt.ylabel('Output Length (Words)', fontsize=12)
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Calculate correlations
+for name, df in datasets.items():
+    corr = df['input_length'].corr(df['output_length'])
+    print(f"{name} - Correlation: {corr:.4f}")
+```
+
+<Callout type="warning">
+**Key Finding:** GenMedGPT-5k shows strongest correlation (0.26) - longer questions get longer answers, while Evaluation Medical shows no correlation (0.04) - consistently short answers.
+</Callout>
+
+---
+
+## 🌡️ Medical Condition Heatmap
+
+```python
+def identify_medical_conditions(text):
+    """Identify medical conditions in text"""
+    medical_conditions = [
+        'syndrome', 'disease', 'carcinoma', 'infection', 'tumor', 'virus', 
+        'blood', 'kidney', 'heart', 'acute', 'cancer', 'chronic', 'liver', 
+        'pain', 'anxiety', 'depression', 'diabetes', 'hypertension'
+    ]
+    
+    if not isinstance(text, str):
+        return []
+    
+    text_lower = text.lower()
+    return [condition for condition in medical_conditions if condition in text_lower]
+
+# Create comparison heatmap
+common_conditions = ['syndrome', 'disease', 'pain', 'blood', 'heart', 'cancer']
+
+comparison_data = {
+    'Condition': common_conditions,
+    'General Medical': [gm_conditions.get(cond, 0) for cond in common_conditions],
+    'Evaluation Medical': [em_conditions.get(cond, 0) for cond in common_conditions],
+    'GenMedGPT-5k': [gp_conditions.get(cond, 0) for cond in common_conditions]
+}
+
+comparison_df = pd.DataFrame(comparison_data)
+comparison_df_pivot = comparison_df.set_index('Condition')
+
+plt.figure(figsize=(12, 8))
+sns.heatmap(comparison_df_pivot, annot=True, cmap='YlGnBu', fmt='.2f', linewidths=.5)
+plt.title('Medical Conditions Across Datasets (% of Documents)', fontsize=14)
+plt.show()
+```
+
+<Callout type="info">
+**Highlight:** GenMedGPT-5k shows extraordinary focus on pain-related content (34.6%) compared to other datasets.
+</Callout>
+
+---
+
+## 📋 Best Practices
+
+<Steps>
+  <Step title="Data Preprocessing">
+    Always clean and normalize text data before analysis. Remove domain-specific stopwords and handle missing values appropriately.
+  </Step>
+  
+  <Step title="Color Schemes">
+    Use colorblind-friendly palettes and maintain consistency across related visualizations.
+  </Step>
+  
+  <Step title="Statistical Significance">
+    Include confidence intervals and report correlation coefficients with significance levels.
+  </Step>
+  
+  <Step title="Medical Context">
+    Provide context for medical terminology frequency and explain clinical significance of observed patterns.
+  </Step>
+</Steps> 

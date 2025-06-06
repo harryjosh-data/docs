@@ -1,0 +1,244 @@
+---
+title: Dataset Analysis & Statistics
+description: Comprehensive analysis and statistical overview of our medical datasets including detailed comparisons and key insights.
+---
+
+# Medical Dataset Analysis & Statistics
+
+This comprehensive analysis covers three key medical datasets, providing detailed insights into their structure, content, and distinctive characteristics.
+
+## 📊 Dataset Overview
+
+Our analysis covers three distinct medical datasets, each serving different purposes in the healthcare AI domain:
+
+<CardGroup cols={3}>
+  <Card title="General Medical Instruction" icon="book-medical">
+    **1,867 entries** focused on educational medical content with concise questions and detailed explanations
+  </Card>
+  <Card title="Evaluation Medical Instruction" icon="clipboard-check">
+    **3,324 entries** designed for medical exams with multiple-choice format and brief answers
+  </Card>
+  <Card title="GenMedGPT-5k" icon="user-doctor">
+    **3,088 entries** simulating patient-doctor dialogues with focus on pain management
+  </Card>
+</CardGroup>
+
+---
+
+## 🔍 Detailed Statistical Comparison
+
+### Text Length Analysis
+
+| Dataset | Entries | Avg Instruction | Avg Input | Avg Output | Input-to-Output Ratio |
+|---------|---------|----------------|-----------|------------|---------------------|
+| **General Medical** | 1,867 | 4.0 words | 17.10 words | 33.10 words | 0.52 |
+| **Evaluation Medical** | 3,324 | 46.0 words | 30.05 words | 2.67 words | **11.25** |
+| **GenMedGPT-5k** | 3,088 | 15.0 words | 23.04 words | 44.76 words | 0.51 |
+
+<Callout type="info">
+The **Evaluation Medical Dataset** has the highest input-to-output ratio (11.25), indicating it's designed for multiple-choice or short-answer testing with lengthy questions but very brief responses.
+</Callout>
+
+### Top Medical Terms by Dataset
+
+<Tabs>
+  <Tab title="General Medical">
+    **Input Field Terms:**
+    - `syndrome` (8.94%)
+    - `disease` (6.37%)
+    - `carcinoma` (3.00%)
+    - `infection` (2.46%)
+    - `tumor` (1.98%)
+
+    **Output Field Terms:**
+    - `characterized` (high frequency)
+    - `type` (high frequency)
+    - `disease` (high frequency)
+    - `syndrome` (high frequency)
+    - `cells` (high frequency)
+  </Tab>
+  <Tab title="Evaluation Medical">
+    **Input Field Terms:**
+    - `except` (highest frequency)
+    - `seen` (high frequency)
+    - `true` (high frequency)
+    - `disease` (6.17%)
+    - `syndrome` (4.87%)
+
+    **Output Field Terms:**
+    - `syndrome` (highest frequency)
+    - `increased` (high frequency)
+    - `disease` (high frequency)
+    - `cell` (high frequency)
+    - `carcinoma` (moderate frequency)
+  </Tab>
+  <Tab title="GenMedGPT-5k">
+    **Input Field Terms:**
+    - `experiencing` (highest frequency)
+    - `pain` (34.62% - **dominant term**)
+    - `could` (high frequency)
+    - `lately` (moderate frequency)
+    - `feeling` (moderate frequency)
+
+    **Output Field Terms:**
+    - `need` (highest frequency)
+    - `also` (high frequency)
+    - `blood` (3.34%)
+    - `heart` (3.34%)
+    - `recommend` (high frequency)
+  </Tab>
+</Tabs>
+
+---
+
+## 🎯 Key Distinctive Features
+
+<Steps>
+  <Step title="General Medical Dataset">
+    **Educational Focus**
+    - Balanced medical terminology distribution
+    - Moderate input complexity with detailed explanations
+    - Strong emphasis on syndrome and disease classification
+    - Perfect for medical education and reference systems
+  </Step>
+  
+  <Step title="Evaluation Medical Dataset">
+    **Examination Format**
+    - Extremely high input-to-output ratio (11.25x)
+    - Long, complex questions with very short answers
+    - Frequent use of "except" indicating multiple-choice format
+    - Ideal for medical board preparation and testing systems
+  </Step>
+  
+  <Step title="GenMedGPT-5k Dataset">
+    **Clinical Dialogue**
+    - **34.62% pain-related content** - extraordinary specialization
+    - Patient-doctor conversation simulation
+    - Longest output responses (44.76 words average)
+    - Optimal for conversational AI and patient consultation systems
+  </Step>
+</Steps>
+
+---
+
+## 📈 Medical Condition Prevalence
+
+### Cross-Dataset Condition Analysis
+
+<AccordionGroup>
+  <Accordion title="Pain Management Focus">
+    **GenMedGPT-5k** shows extraordinary specialization:
+    - `pain`: **34.62%** (vs. 0.37% in General Medical, 3.09% in Evaluation)
+    - This represents a **90x higher** pain focus compared to other datasets
+    - Indicates specialized use case for pain management applications
+  </Accordion>
+  
+  <Accordion title="General Medical Conditions">
+    **Balanced distribution across datasets:**
+    - `syndrome`: 8.94% (General), 4.87% (Evaluation), 1.42% (GenMedGPT)
+    - `disease`: 6.37% (General), 6.17% (Evaluation), 2.81% (GenMedGPT)
+    - `blood`: 1.50% (General), 3.22% (Evaluation), 3.33% (GenMedGPT)
+  </Accordion>
+  
+  <Accordion title="Specialized Terms">
+    **Dataset-specific terminology patterns:**
+    - **General Medical**: High carcinoma/tumor focus (medical education)
+    - **Evaluation Medical**: Balanced clinical terms (exam preparation)
+    - **GenMedGPT-5k**: Patient symptom language (consultation simulation)
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## 🔗 Correlation Insights
+
+### Input-Output Length Relationships
+
+<CardGroup cols={3}>
+  <Card title="General Medical">
+    **Correlation: 0.1423**
+    <br/>
+    Weak positive correlation between question length and answer detail
+  </Card>
+  <Card title="Evaluation Medical">
+    **Correlation: 0.0392**
+    <br/>
+    Nearly no correlation - consistent short answers regardless of question length
+  </Card>
+  <Card title="GenMedGPT-5k">
+    **Correlation: 0.2587**
+    <br/>
+    Strongest correlation - longer patient questions receive more detailed responses
+  </Card>
+</CardGroup>
+
+<Callout type="warning">
+The **GenMedGPT-5k** dataset shows the most natural conversation pattern where complex patient concerns (longer inputs) typically receive more comprehensive medical responses (longer outputs).
+</Callout>
+
+---
+
+## 🎯 Dataset Selection Guide
+
+### Choose the Right Dataset for Your Use Case
+
+<Tabs>
+  <Tab title="Medical Education">
+    **Recommended: General Medical Dataset**
+    - Balanced medical terminology
+    - Educational question-answer format
+    - Detailed explanations and definitions
+    - Covers wide range of medical conditions
+  </Tab>
+  
+  <Tab title="Exam Preparation">
+    **Recommended: Evaluation Medical Dataset**
+    - Multiple-choice format indicators
+    - Concise, definitive answers
+    - High question complexity
+    - Board exam style content
+  </Tab>
+  
+  <Tab title="Patient Consultation AI">
+    **Recommended: GenMedGPT-5k Dataset**
+    - Natural conversation patterns
+    - Detailed medical responses
+    - Strong pain management focus
+    - Patient symptom language
+  </Tab>
+  
+  <Tab title="Comprehensive Coverage">
+    **Recommended: All Three Datasets**
+    - Combined: 8,279 total entries
+    - Covers education, examination, and consultation
+    - Diverse medical terminology and formats
+    - Maximum training data variety
+  </Tab>
+</Tabs>
+
+---
+
+## 📋 Quality Metrics Summary
+
+<CardGroup cols={4}>
+  <Card title="Content Diversity">
+    **Excellent**
+    <br/>
+    25+ medical specialties covered across datasets
+  </Card>
+  <Card title="Format Variety">
+    **High**
+    <br/>
+    Educational, examination, and conversational formats
+  </Card>
+  <Card title="Specialization">
+    **Strong**
+    <br/>
+    Each dataset serves distinct use cases effectively
+  </Card>
+  <Card title="Correlation">
+    **Varied**
+    <br/>
+    Different input-output relationships match intended use
+  </Card>
+</CardGroup> 
